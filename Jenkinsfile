@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/snap/bin"
+    }
+
     stages {
         stage('Clone Repo') {
             steps {
@@ -16,7 +20,10 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f k8s-deployment.yaml'
+                sh '''
+                  kubectl version --client
+                  kubectl apply -f k8s-deployment.yaml
+                '''
             }
         }
     }
